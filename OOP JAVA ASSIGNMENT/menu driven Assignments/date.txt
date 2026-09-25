@@ -1,0 +1,243 @@
+import java.util.Scanner;
+
+class MyDate {
+
+    int day;
+    int month;
+    int year;
+
+    // Set date
+    void setDate(int day, int month, int year) {
+
+        if (isValidDate(day, month, year)) {
+
+            this.day = day;
+            this.month = month;
+            this.year = year;
+
+            System.out.println("Date set successfully");
+
+        } else {
+
+            System.out.println("Invalid Date");
+        }
+    }
+
+    // Check leap year
+    boolean isLeapYear(int year) {
+
+        if (year % 400 == 0) {
+            return true;
+        }
+
+        if (year % 100 == 0) {
+            return false;
+        }
+
+        return year % 4 == 0;
+    }
+
+    // Get number of days in month
+    int daysInMonth(int month, int year) {
+
+        if (month == 2) {
+
+            if (isLeapYear(year)) {
+                return 29;
+            } else {
+                return 28;
+            }
+        }
+
+        if (month == 4 || month == 6 ||
+            month == 9 || month == 11) {
+
+            return 30;
+        }
+
+        return 31;
+    }
+
+    // Validate date
+    boolean isValidDate(int day, int month, int year) {
+
+        if (month < 1 || month > 12) {
+            return false;
+        }
+
+        if (day < 1 || day > daysInMonth(month, year)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // Add days
+    void addDays(int days) {
+
+        for (int i = 1; i <= days; i++) {
+
+            day++;
+
+            if (day > daysInMonth(month, year)) {
+
+                day = 1;
+                month++;
+
+                if (month > 12) {
+
+                    month = 1;
+                    year++;
+                }
+            }
+        }
+
+        System.out.println("Days added successfully");
+    }
+
+    // Add months
+    void addMonths(int months) {
+
+        for (int i = 1; i <= months; i++) {
+
+            month++;
+
+            if (month > 12) {
+
+                month = 1;
+                year++;
+            }
+
+            // Adjust day if new month has fewer days
+            if (day > daysInMonth(month, year)) {
+
+                day = daysInMonth(month, year);
+            }
+        }
+
+        System.out.println("Months added successfully");
+    }
+
+    // Add years
+    void addYears(int years) {
+
+        for (int i = 1; i <= years; i++) {
+
+            year++;
+
+            // 29 Feb becomes 28 Feb
+            // if new year is not leap year
+            if (month == 2 && day == 29 &&
+                !isLeapYear(year)) {
+
+                day = 28;
+            }
+        }
+
+        System.out.println("Years added successfully");
+    }
+
+    // Display date
+    void display() {
+
+        System.out.println("Date: "
+                + day + "/" + month + "/" + year);
+    }
+}
+
+public class DateAssignment {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        MyDate date = new MyDate();
+
+        int choice;
+
+        do {
+
+            System.out.println("\n========== DATE MENU ==========");
+            System.out.println("1. Set Date");
+            System.out.println("2. Add Days");
+            System.out.println("3. Add Months");
+            System.out.println("4. Add Years");
+            System.out.println("5. Display");
+            System.out.println("6. Compare Dates");
+            System.out.println("7. Exit");
+
+            System.out.print("Enter choice: ");
+            choice = sc.nextInt();
+
+            switch (choice) {
+
+            case 1:
+
+                System.out.print("Enter Day: ");
+                int day = sc.nextInt();
+
+                System.out.print("Enter Month: ");
+                int month = sc.nextInt();
+
+                System.out.print("Enter Year: ");
+                int year = sc.nextInt();
+
+                date.setDate(day, month, year);
+
+                break;
+
+            case 2:
+
+                System.out.print("Enter number of days: ");
+                int days = sc.nextInt();
+
+                date.addDays(days);
+
+                break;
+
+            case 3:
+
+                System.out.print("Enter number of months: ");
+                int months = sc.nextInt();
+
+                date.addMonths(months);
+
+                break;
+
+            case 4:
+
+                System.out.print("Enter number of years: ");
+                int years = sc.nextInt();
+
+                date.addYears(years);
+
+                break;
+
+            case 5:
+
+                date.display();
+
+                break;
+
+            case 6:
+
+                System.out.println("Compare Dates - Not implemented");
+
+                break;
+
+            case 7:
+
+                System.out.println("Thank You");
+
+                break;
+
+            default:
+
+                System.out.println("Invalid Choice");
+            }
+
+        } while (choice != 7);
+
+        sc.close();
+    }
+}
